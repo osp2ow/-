@@ -7,6 +7,7 @@ export interface Consultation {
   phone: string;
   part: string;
   content: string;
+  date?: string; // 검색 결과 표시용
 }
 
 export interface Reservation {
@@ -16,14 +17,16 @@ export interface Reservation {
   name: string;
   phone: string;
   part: string;
-  isPaid?: boolean;         // 첫수업 결제 여부
-  isFormSubmitted?: boolean; // 첫수업 원서 제출 여부
+  isPaid?: boolean;
+  isFormSubmitted?: boolean;
+  createdAt?: string; // 검색 결과 표시용 (기록된 날짜)
 }
 
 export interface Expense {
   id: string;
   amount: number;
   description: string;
+  date?: string; // 검색 결과 표시용
 }
 
 export interface Payment {
@@ -35,6 +38,7 @@ export interface Payment {
   method: PaymentMethod;
   isClbiz: boolean;
   isJournal: boolean;
+  date?: string; // 검색 결과 표시용
 }
 
 export interface TodoItem {
@@ -43,11 +47,10 @@ export interface TodoItem {
   completed: boolean;
 }
 
-// 지속 노출 항목을 위한 래퍼
 export interface PersistentWrapper<T> {
   data: T;
-  createdAt: string; // YYYY-MM-DD
-  deletedAt: string | null; // YYYY-MM-DD 또는 null
+  createdAt: string; 
+  deletedAt: string | null;
 }
 
 export interface DailyReport {
@@ -64,8 +67,11 @@ export interface DailyReport {
 }
 
 export interface StateData {
-  days: { [date: string]: Omit<DailyReport, 'consultations' | 'reservations' | 'firstLessons' | 'date' | 'manager'> & { manager?: string } };
+  days: { [date: string]: Omit<DailyReport, 'consultations' | 'reservations' | 'firstLessons' | 'fixedNotice' | 'newNotice' | 'date' | 'manager' | 'shoppingList'> & { manager?: string } };
   masterConsultations: PersistentWrapper<Consultation>[];
   masterReservations: PersistentWrapper<Reservation>[];
   masterFirstLessons: PersistentWrapper<Reservation>[];
+  masterFixedNotices: PersistentWrapper<string>[];
+  masterNewNotices: PersistentWrapper<string>[];
+  masterShoppingList: PersistentWrapper<TodoItem>[];
 }
